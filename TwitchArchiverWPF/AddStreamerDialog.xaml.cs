@@ -1,21 +1,13 @@
 ﻿using HandyControl.Interactivity;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using TwitchArchiverWPF.TwitchObjects;
 using MessageBox = HandyControl.Controls.MessageBox;
 
@@ -27,7 +19,7 @@ namespace TwitchArchiverWPF
     public partial class AddStreamerDialog
     {
         DateTime lastTyped = DateTime.MinValue;
-        ObservableCollection<Streamer> StreamerItems;
+        private readonly ObservableCollection<Streamer> StreamerItems;
         bool isValidated = false;
         string avatarUrl = "";
         string streamerName = "";
@@ -50,14 +42,14 @@ namespace TwitchArchiverWPF
             }
             if (isValidated)
             {
-                DownloadOptions downloadOptions = new DownloadOptions() { DownloadLiveStream = (bool)CheckDownloadLiveStream.IsChecked, DownloadLiveChat = (bool)CheckDownloadLiveChat.IsChecked, DownloadVodStream = (bool)CheckDownloadVodStream.IsChecked, DownloadVodChat = (bool)CheckDownloadVodChat.IsChecked };
+                DownloadOptions downloadOptions = new() { DownloadLiveStream = (bool)CheckDownloadLiveStream.IsChecked, DownloadLiveChat = (bool)CheckDownloadLiveChat.IsChecked, DownloadVodStream = (bool)CheckDownloadVodStream.IsChecked, DownloadVodChat = (bool)CheckDownloadVodChat.IsChecked };
                 if (!downloadOptions.DownloadLiveChat && !downloadOptions.DownloadLiveStream && !downloadOptions.DownloadVodChat && !downloadOptions.DownloadVodStream)
                 {
                     MessageBox.Show("At least 1 download option needs to be selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {
-                    Streamer newStreamer = new Streamer() { Name = streamerName, Id = StreamerId.Text, AvatarUrl = avatarUrl, StreamCount = 0, DownloadOptions = downloadOptions };
+                    Streamer newStreamer = new() { Name = streamerName, Id = StreamerId.Text, AvatarUrl = avatarUrl, StreamCount = 0, DownloadOptions = downloadOptions };
                     if (!StreamerItems.Any(x => x.Id == newStreamer.Id))
                     {
                         StreamerItems.Add(newStreamer);
@@ -93,7 +85,7 @@ namespace TwitchArchiverWPF
         {
             try
             {
-                using WebClient client = new WebClient();
+                using WebClient client = new();
                 client.Headers.Add("Client-ID", "kimne78kx3ncx6brgo4mv6wki5h1ko");
                 client.Headers[HttpRequestHeader.ContentType] = "application/json";
                 string gqlResponse = await client.UploadStringTaskAsync("https://gql.twitch.tv/gql", "{\"query\":\"query{user(login:\\\"" + StreamerName.Text + "\\\"){id,login,displayName, profileImageURL(width: 70)}}\",\"variables\":{}}");
@@ -107,7 +99,7 @@ namespace TwitchArchiverWPF
                         try
                         {
                             avatarUrl = profileResponse.data.user.profileImageURL;
-                            BitmapImage image = new BitmapImage(new Uri(avatarUrl));
+                            BitmapImage image = new(new Uri(avatarUrl));
                             StreamerAvatar.Source = image;
                         }
                         catch { }

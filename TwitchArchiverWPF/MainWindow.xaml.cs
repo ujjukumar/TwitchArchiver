@@ -1,7 +1,6 @@
 ﻿using HandyControl.Controls;
 using Microsoft.WindowsAPICodePack.Shell;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Serilog;
 using Serilog.Core;
 using SkiaSharp;
@@ -9,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
@@ -17,21 +15,11 @@ using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.Json;
 using System.Threading;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using TwitchArchiverWPF.Settings;
 using TwitchArchiverWPF.TwitchObjects;
 using TwitchDownloaderCore;
@@ -39,7 +27,6 @@ using TwitchDownloaderCore.Options;
 using TwitchLib.Client;
 using TwitchLib.Client.Models;
 using Xabe.FFmpeg.Downloader;
-using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 using Path = System.IO.Path;
 using Window = System.Windows.Window;
 
@@ -206,7 +193,7 @@ namespace TwitchArchiverWPF
                         {
                             firstPlaylist = new WebClient().DownloadString(playlistUrl);
                         }
-                        catch 
+                        catch
                         {
                             tryCount++;
                             await Task.Delay(1000);
@@ -253,7 +240,7 @@ namespace TwitchArchiverWPF
                             Console.WriteLine(ex);
                         }
                     }
-                    
+
                     liveTask = DownloadLiveTask(playlistUrl, firstPlaylist, livePartsList, liveDirectory, logger, liveCancel.Token);
                 }
 
@@ -500,7 +487,7 @@ namespace TwitchArchiverWPF
                     streamMetadata.LiveChatPath = Path.GetRelativePath(finalFolder, Path.Combine(finalFolder, "Live", "live_chat.json"));
                     if ((!streamer.OverrideRenderSettings && globalSettings.RenderSettings.RenderChat && (globalSettings.RenderSettings.RenderPrefrence == RenderPrefrence.Live || globalSettings.RenderSettings.RenderPrefrence == RenderPrefrence.Both)) || (streamer.OverrideRenderSettings && streamer.RenderSettings.RenderChat && (streamer.RenderSettings.RenderPrefrence == RenderPrefrence.Live || streamer.RenderSettings.RenderPrefrence == RenderPrefrence.Both)))
                     {
-                        Task t = Task.Run(() => 
+                        Task t = Task.Run(() =>
                         {
                             try
                             {
@@ -542,7 +529,7 @@ namespace TwitchArchiverWPF
                         renderTasks.Add(t);
                     }
                 }
-                catch 
+                catch
                 {
                     if (liveChatTask != null && liveChatTask.IsFaulted && liveChatTask.Exception != null)
                         logger.Error("Live chat error: " + liveChatTask.Exception);
@@ -624,7 +611,7 @@ namespace TwitchArchiverWPF
                                     resData.Games.Add(game);
                             }
                         }
-                        
+
                         if (resData.Title == null && streamInfo.data.user.broadcastSettings != null && streamInfo.data.user.broadcastSettings.title != null)
                         {
                             resData.Title = streamInfo.data.user.broadcastSettings.title;
@@ -689,7 +676,7 @@ namespace TwitchArchiverWPF
                 await Task.Delay(15000);
             }
             client.Disconnect();
-            
+
             ChatRoot chatRoot = new ChatRoot();
             chatRoot.comments = messages;
             chatRoot.streamer = new global::Streamer();
@@ -713,7 +700,7 @@ namespace TwitchArchiverWPF
             returnComment.channel_id = streamer.Id;
             returnComment.content_type = "live";
             returnComment.content_id = "";
-            returnComment.content_offset_seconds = (commentTime/ 1000.0) - startTime;
+            returnComment.content_offset_seconds = (commentTime / 1000.0) - startTime;
             returnComment.commenter = new Commenter();
             returnComment.commenter.display_name = chatMessage.DisplayName;
             returnComment.commenter._id = chatMessage.UserId;
@@ -860,7 +847,7 @@ namespace TwitchArchiverWPF
                         }
                     }
                 }
-                catch{ }
+                catch { }
                 tryCount++;
             }
             return null;

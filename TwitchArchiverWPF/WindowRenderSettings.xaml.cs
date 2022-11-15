@@ -1,20 +1,10 @@
 ﻿using HandyControl.Controls;
 using HandyControl.Tools;
 using SkiaSharp;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using TwitchArchiverWPF.Settings;
 using Window = System.Windows.Window;
 
 namespace TwitchArchiverWPF
@@ -93,12 +83,13 @@ namespace TwitchArchiverWPF
             {
                 PopupElement = picker
             };
-            picker.Confirmed += delegate {
+            picker.Confirmed += delegate
+            {
                 Color color = picker.SelectedBrush.Color;
                 string colorText = "#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
                 TextFontColor.Text = colorText;
                 RectangleFontColor.Fill = new SolidColorBrush(color);
-                window.Close(); 
+                window.Close();
             };
             picker.Canceled += delegate { window.Close(); };
             window.Show(ButtonFontColor, false);
@@ -111,7 +102,8 @@ namespace TwitchArchiverWPF
             {
                 PopupElement = picker
             };
-            picker.Confirmed += delegate {
+            picker.Confirmed += delegate
+            {
                 Color color = picker.SelectedBrush.Color;
                 string colorText = "#" + color.R.ToString("X2") + color.G.ToString("X2") + color.B.ToString("X2");
                 TextBackgroundColor.Text = colorText;

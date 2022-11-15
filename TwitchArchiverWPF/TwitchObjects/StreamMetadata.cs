@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace TwitchArchiverWPF.TwitchObjects
@@ -25,7 +22,8 @@ namespace TwitchArchiverWPF.TwitchObjects
         [JsonIgnore]
         public string? MetadataPath { get; set; }
         [JsonIgnore]
-        public BitmapImage? ThumbnailImage { 
+        public BitmapImage? ThumbnailImage
+        {
             get
             {
                 if (String.IsNullOrWhiteSpace(Thumbnail))
@@ -40,7 +38,7 @@ namespace TwitchArchiverWPF.TwitchObjects
 
                     return bi;
                 }
-            } 
+            }
         }
         [JsonIgnore]
         public TimeSpan LengthTimeSpan
